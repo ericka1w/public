@@ -17,7 +17,7 @@
 import webapp2
 import json
 import random
-import urllib2
+import urllib
 import jinja2
 import os
 
@@ -26,17 +26,31 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        giphy_data_source = urllib2.urlopen(
-            "http://api.giphy.com/v1/gifs/search?q=candy+&api_key=dc6zaTOxFJmzC&limit=10")
-        giphy_json_content = giphy_data_source.read()
-        parsed_giphy_dictionary = json.loads(giphy_json_content)
+        #me = {'ERICKA': gif_url}
+
+
+        template = jinja_environment.get_template('templates2.html')
+        self.response.write(template.render())
+
+class newhandler(webapp2.RequestHandler):
+    def get(self):
+        base_url = "http://api.giphy.com/v1/gifs/search?"
+        url_params = {'q': self.request.get('SearchBar'), 'api_key': 'dc6zaTOxFJmzC', 'limit': 10}
+
+        giphy_response = urllib.urlopen(base_url + urllib.urlencode(url_params)).read()
+
+
+        #giphy_json_content = giphy_response.read()
+        parsed_giphy_dictionary = json.loads(giphy_response)
         gif_url = parsed_giphy_dictionary['data'][0]['images']['original']['url']
         me = {'ERICKA': gif_url}
-
 
         template = jinja_environment.get_template('template.html')
         self.response.write(template.render(me))
 
+
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/action',newhandler),
 ], debug=True)
