@@ -27,7 +27,7 @@ jinja_environment = jinja2.Environment(
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         giphy_data_source = urllib2.urlopen(
-            "http://api.giphy.com/v1/gifs/search?q=brysontiller+&api_key=dc6zaTOxFJmzC&limit=10")
+            "http://api.giphy.com/v1/gifs/search?q=candy+&api_key=dc6zaTOxFJmzC&limit=10")
         giphy_json_content = giphy_data_source.read()
         parsed_giphy_dictionary = json.loads(giphy_json_content)
         gif_url = parsed_giphy_dictionary['data'][0]['images']['original']['url']
